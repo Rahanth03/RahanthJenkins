@@ -1,35 +1,79 @@
 pipeline {
     agent any
- 
     stages {
-        stage("Build") {
+        stage('Build') {
             steps {
-                echo "Building ..."
+                echo 'Task: Build the code using Maven'
+            }
+        }
+        stage('Unit and Integration Tests') {
+            steps {
+                echo 'Task: Run unit tests and integration tests'
+                echo 'Tools: JUnit, Selenium'
             }
             post {
-                always {
-                    mail to: "rahanthalagesan@gmail.com",
-                        subject: "Build Status Email",
-                        body: "Build log attached!"
+                success {
+                    echo 'Task: Send success email notification for tests'
+                    emailext subject: "Unit and Integration Tests Success: ${currentBuild.fullDisplayName}",
+                              body: "Unit and integration tests passed successfully.",
+                              to: "rahanthalagesan@gmail.com",
+                              attachLog: true
+                }
+                failure {
+                    echo 'Task: Send failure email notification for tests'
+                    emailext subject: "Unit and Integration Tests Failure: ${currentBuild.fullDisplayName}",
+                              body: "Unit and integration tests failed.",
+                              to: "rahanthalagesan@gmail.com",
+                              attachLog: true
                 }
             }
         }
- 
-        stage("Test") {
+        stage('Code Analysis') {
             steps {
-                echo "Testing ..."
+                echo 'Task: Integrate SonarQube for code analysis'
+                echo 'Tool: SonarQube'
             }
         }
- 
-        stage("Deploy") {
+        stage('Security Scan') {
             steps {
-                echo "Deploying ..."
+                echo 'Task: Perform security scan using OWASP ZAP'
+                echo 'Tool: OWASP ZAP'
+            }
+            post {
+                success {
+                    echo 'Task: Send success email notification for security scan'
+                    emailext subject: "Security Scan Success: ${currentBuild.fullDisplayName}",
+                              body: "Security scan passed successfully.",
+                              to: "rahanthalagesan@gmail.com",
+                              attachLog: true
+                }
+                failure {
+                    echo 'Task: Send failure email notification for security scan'
+                    emailext subject: "Security Scan Failure: ${currentBuild.fullDisplayName}",
+                              body: "Security scan failed.",
+                              to: "rahanthalagesan@gmail.com",
+                              attachLog: true
+                }
             }
         }
-        stage("Complete") {
+        stage('Deploy to Staging') {
             steps {
-                echo "Completed Successfully"
+                echo 'Task: Deploy to staging server using AWS CodeDeploy'
+                echo 'Tool: AWS CodeDeploy'
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Task: Run integration tests on staging environment'
+                echo 'Tool: Selenium'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'Task: Deploy to production server using AWS CodeDeploy'
+                echo 'Tool: AWS CodeDeploy'
             }
         }
     }
+   
 }
