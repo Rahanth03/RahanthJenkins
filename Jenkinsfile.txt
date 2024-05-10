@@ -4,10 +4,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Task: Buld the code using Maven'
+                echo 'Task: Build the code using Maven'
                 
                 // Create a log file for the build
-                writeFile file: 'build.log', text: 'Buildin the code using Maven.'
+                writeFile file: 'build.log', text: 'Building the code using Maven.'
             }
         }
         stage('Unit and Integration Tests') {
@@ -18,14 +18,22 @@ pipeline {
                 // Create a log file for unit and integration tests
                 writeFile file: 'tests.log', text: 'Running unit and integration tests.'
             }
+            post {
+                always {
+                    // Send email notification with the attached log files
+                    emailext (
+                        to: "rahanthalagesan@gmail.com",
+                        subject: "Unit and Integration Tests Status Email",
+                        body: "Unit and integration tests log attached!",
+                        attachmentsPattern: "*.log"
+                    )
+                }
+            }
         }
         stage('Code Analysis') {
             steps {
                 echo 'Task: Integrate SonarQube for code analysis'
                 echo 'Tool: SonarQube'
-                
-                // Create a log file for code analysis
-                writeFile file: 'analysis.log', text: 'Integrating SonarQube for code analysis.'
             }
         }
         stage('Security Scan') {
@@ -36,19 +44,29 @@ pipeline {
                 // Create a log file for security scan
                 writeFile file: 'security_scan.log', text: 'Performing security scan using OWASP ZAP.'
             }
+            post {
+                always {
+                    // Send email notification with the attached log files
+                    emailext (
+                        to: "rahanthalagesan@gmail.com",
+                        subject: "Security Scan Status Email",
+                        body: "Security scan log attached!",
+                        attachmentsPattern: "*.log"
+                    )
+                }
+            }
         }
-        // Add other stages as needed
-    }
-    
-    post {
-        always {
-            // Send email notification with the attached log files
-            emailext (
-                to: "rahanthalagesan@gmail.com",
-                subject: "Pipeline Execution Status",
-                body: "Please find the log files attached for the pipeline execution.",
-                attachLog: true
-            )
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Task: Run integration tests on staging environment'
+                echo 'Tool: Selenium'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'Task: Deploy to production server using AWS CodeDeploy'
+                echo 'Tool: AWS CodeDeploy'
+            }
         }
     }
 }
