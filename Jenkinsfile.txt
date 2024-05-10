@@ -17,7 +17,7 @@ pipeline {
                         to: "rahanthalagesan@gmail.com",
                         subject: "Unit and Integration Tests Status Email",
                         body: "Unit and integration tests log attached!",
-                        attachLog: true
+                        attachmentsPattern: "**/*.log"
                     )
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
                         to: "rahanthalagesan@gmail.com",
                         subject: "Security Scan Status Email",
                         body: "Security scan log attached!",
-                        attachLog: true
+                        attachmentsPattern: "**/*.log"
                     )
                 }
             }
