@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Task: Bild the code using Maven'
+                echo 'Task: Build the code using Maven'
                 
                 // Create a log file for the build
                 writeFile file: 'build.log', text: 'Building the code using Maven.'
@@ -43,11 +43,11 @@ pipeline {
     post {
         always {
             // Send email notification with the attached log files
-            mail (
+            emailext (
                 to: "rahanthalagesan@gmail.com",
                 subject: "Pipeline Execution Status",
                 body: "Please find the log files attached for the pipeline execution.",
-                attachments: ['build.log', 'tests.log', 'analysis.log', 'security_scan.log']
+                attachmentsPattern: "*.log"
             )
         }
     }
