@@ -4,9 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Task: Build the code using Maven'
-                
-                // Create a log file for the build
+                echo 'Task: Build this code using Maven'
                 writeFile file: 'build.log', text: 'Building the code using Maven.'
             }
         }
@@ -20,7 +18,6 @@ pipeline {
             }
             post {
                 always {
-                    // Send email notification with the attached log files
                     emailext (
                         to: "rahanthalagesan@gmail.com",
                         subject: "Unit and Integration Tests Status Email",
@@ -40,13 +37,10 @@ pipeline {
             steps {
                 echo 'Task: Perform security scan using OWASP ZAP'
                 echo 'Tool: OWASP ZAP'
-                
-                // Create a log file for security scan
                 writeFile file: 'security_scan.log', text: 'Performing security scan using OWASP ZAP.'
             }
             post {
                 always {
-                    // Send email notification with the attached log files
                     emailext (
                         to: "rahanthalagesan@gmail.com",
                         subject: "Security Scan Status Email",
