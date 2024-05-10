@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Task: Build the code using Maven'
+                echo 'Task: Bild the code using Maven'
                 
                 // Create a log file for the build
                 writeFile file: 'build.log', text: 'Building the code using Maven.'
