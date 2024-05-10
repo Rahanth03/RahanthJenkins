@@ -5,13 +5,6 @@ pipeline {
             steps {
                 echo 'Task: Build the code using Maven'
             }
-            post {
-                always {
-                    mail to: "rahanthalagesan@gmail.com",
-                        subject: "Build Status Email",
-                        body: "Build log attached!"
-                }
-            }
         }
         stage('Unit and Integration Tests') {
             steps {
@@ -22,7 +15,8 @@ pipeline {
                 always {
                     mail to: "rahanthalagesan@gmail.com",
                         subject: "Unit and Integration Tests Status Email",
-                        body: "Unit and integration tests log attached!"
+                        body: "Unit and integration tests log attached!",
+                        attachLog: true
                 }
             }
         }
@@ -41,7 +35,8 @@ pipeline {
                 always {
                     mail to: "rahanthalagesan@gmail.com",
                         subject: "Security Scan Status Email",
-                        body: "Security scan log attached!"
+                        body: "Security scan log attached!",
+                        attachLog: true
                 }
             }
         }
