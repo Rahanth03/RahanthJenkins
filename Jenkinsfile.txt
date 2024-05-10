@@ -43,11 +43,11 @@ pipeline {
     post {
         always {
             // Send email notification with the attached log files
-            mail (
+            emailext (
                 to: "rahanthalagesan@gmail.com",
                 subject: "Pipeline Execution Status",
                 body: "Please find the log files attached for the pipeline execution.",
-                attachments: "*.log"
+                attachmentsPattern: "*.log"
             )
         }
     }
