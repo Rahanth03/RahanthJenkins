@@ -47,7 +47,7 @@ pipeline {
                 to: "rahanthalagesan@gmail.com",
                 subject: "Pipeline Execution Status",
                 body: "Please find the log files attached for the pipeline execution.",
-                attachmentsPattern: "*.log"
+                attachments: ['build.log', 'tests.log', 'analysis.log', 'security_scan.log']
             )
         }
     }
