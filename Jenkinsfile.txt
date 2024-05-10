@@ -5,6 +5,13 @@ pipeline {
             steps {
                 echo 'Task: Build the code using Maven'
             }
+            post {
+                always {
+                    mail to: "rahanthalagesan@gmail.com",
+                        subject: "Build Status Email",
+                        body: "Build log attached!"
+                }
+            }
         }
         stage('Unit and Integration Tests') {
             steps {
@@ -12,19 +19,10 @@ pipeline {
                 echo 'Tools: JUnit, Selenium'
             }
             post {
-                success {
-                    echo 'Task: Send success email notification for tests'
-                    emailext subject: "Unit and Integration Tests Success: ${currentBuild.fullDisplayName}",
-                              body: "Unit and integration tests passed successfully.",
-                              to: "rahanthalagesan@gmail.com",
-                              attachLog: true
-                }
-                failure {
-                    echo 'Task: Send failure email notification for tests'
-                    emailext subject: "Unit and Integration Tests Failure: ${currentBuild.fullDisplayName}",
-                              body: "Unit and integration tests failed.",
-                              to: "rahanthalagesan@gmail.com",
-                              attachLog: true
+                always {
+                    mail to: "rahanthalagesan@gmail.com",
+                        subject: "Unit and Integration Tests Status Email",
+                        body: "Unit and integration tests log attached!"
                 }
             }
         }
@@ -40,19 +38,10 @@ pipeline {
                 echo 'Tool: OWASP ZAP'
             }
             post {
-                success {
-                    echo 'Task: Send success email notification for security scan'
-                    emailext subject: "Security Scan Success: ${currentBuild.fullDisplayName}",
-                              body: "Security scan passed successfully.",
-                              to: "rahanthalagesan@gmail.com",
-                              attachLog: true
-                }
-                failure {
-                    echo 'Task: Send failure email notification for security scan'
-                    emailext subject: "Security Scan Failure: ${currentBuild.fullDisplayName}",
-                              body: "Security scan failed.",
-                              to: "rahanthalagesan@gmail.com",
-                              attachLog: true
+                always {
+                    mail to: "rahanthalagesan@gmail.com",
+                        subject: "Security Scan Status Email",
+                        body: "Security scan log attached!"
                 }
             }
         }
@@ -75,5 +64,4 @@ pipeline {
             }
         }
     }
-   
 }
